@@ -1,16 +1,6 @@
 // src/services/authService.ts
 import api from './api';
 
-interface RegisterPayload {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
-  role: 'student' | 'teacher';
-  agreeToTerms: boolean;
-  marketingOptIn?: boolean;
-}
 /**
  * Service for authentication-related API calls
  */
@@ -35,8 +25,20 @@ const authService = {
    * @param role - User role (default: 'student')
    * @returns User data with tokens
    */
-  async register(payload: RegisterPayload) {
-    const response = await api.post('/auth/register', payload);
+  async register(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    role: string = 'student'
+  ) {
+    const response = await api.post('/auth/register', {
+      email,
+      password,
+      firstName,
+      lastName,
+      role,
+    });
     return response.data.data;
   },
 

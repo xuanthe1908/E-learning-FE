@@ -45,25 +45,26 @@ export const login = createAsyncThunk(
   }
 );
 
-interface RegisterPayload {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  firstName: string;
-  lastName: string;
-  role: 'student' | 'teacher';
-  agreeToTerms: boolean;
-  marketingOptIn?: boolean;
-}
-
 export const register = createAsyncThunk(
   'auth/register',
   async (
-    payload: RegisterPayload,
+    { 
+      email, 
+      password, 
+      firstName, 
+      lastName, 
+      role = 'student' 
+    }: { 
+      email: string; 
+      password: string; 
+      firstName: string; 
+      lastName: string; 
+      role?: string;
+    }, 
     { dispatch, rejectWithValue }
   ) => {
     try {
-      const data = await authService.register(payload);
+      const data = await authService.register(email, password, firstName, lastName, role);
       return data;
     } catch (err: any) {
       const message = err.response?.data?.message || err.message || 'Registration failed';

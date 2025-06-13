@@ -1,3 +1,4 @@
+// src/pages/RegisterPage.tsx
 import * as React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -6,13 +7,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { register as registerUser } from '../redux/slices/authSlice';
 import { AppDispatch, RootState } from '../redux/store';
 import Button from '../components/ui/Button';
-import {
-  EyeIcon,
+import { 
+  EyeIcon, 
   EyeSlashIcon,
   LockClosedIcon,
   EnvelopeIcon,
   UserIcon,
-  ExclamationCircleIcon
+  ExclamationCircleIcon,
+  CheckIcon
 } from '@heroicons/react/24/outline';
 
 interface RegisterFormData {
@@ -23,9 +25,7 @@ interface RegisterFormData {
   confirmPassword: string;
   role: 'student' | 'teacher';
   terms: boolean;
-  marketingOptIn?: boolean;
 }
-
 
 const RegisterPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,53 +33,56 @@ const RegisterPage: React.FC = () => {
   const { loading, error } = useSelector((state: RootState) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const {
-  register,
-  handleSubmit,
-  watch,
-  formState: { errors }
-} = useForm<RegisterFormData>({
-  defaultValues: {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'student',
-    terms: false,           
-    marketingOptIn: false
-  }
-});
-
-  const password = watch('password');
-
-const onSubmit = async (data: RegisterFormData) => {
-  try {
-    const resultAction = await dispatch(registerUser({
-      ...data,
-      agreeToTerms: data.terms,         
-    }));
-
-    if (registerUser.fulfilled.match(resultAction)) {
-      const user = resultAction.payload.user;
-      let redirectPath = '/';
-
-      if (user.role === 'student') {
-        redirectPath = '/dashboard/student';
-      } else if (user.role === 'teacher') {
-        redirectPath = '/dashboard/teacher';
-      } else if (user.role === 'admin') {
-        redirectPath = '/dashboard/admin';
-      }
-
-      navigate(redirectPath, { replace: true });
+  
+  const { 
+    register, 
+    handleSubmit, 
+    watch,
+    formState: { errors } 
+  } = useForm<RegisterFormData>({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      role: 'student',
+      terms: false
     }
-  } catch (err) {
-    console.error('Registration failed:', err);
-  }
-};
+  });
+  
+  // For password confirmation validation
+  const password = watch("password");
 
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      const resultAction = await dispatch(registerUser({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.password,
+        role: data.role
+      }));
+      
+      if (registerUser.fulfilled.match(resultAction)) {
+        // Registration successful, redirect to appropriate dashboard
+        const user = resultAction.payload.user;
+        let redirectPath = '/';
+        
+        if (user.role === 'student') {
+          redirectPath = '/dashboard/student';
+        } else if (user.role === 'teacher') {
+          redirectPath = '/dashboard/teacher';
+        } else if (user.role === 'admin') {
+          redirectPath = '/dashboard/admin';
+        }
+        
+        navigate(redirectPath, { replace: true });
+      }
+    } catch (err) {
+      console.error('Registration failed:', err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -87,7 +90,7 @@ const onSubmit = async (data: RegisterFormData) => {
         <Link to="/" className="flex justify-center">
           <img
             className="h-12 w-auto"
-            src=".\frontend\asset\logo.png"
+            src="/logo.svg"
             alt="E-Learning Platform Logo"
           />
         </Link>
