@@ -109,7 +109,7 @@ const ResetPasswordPage: React.FC = () => {
         <Link to="/" className="flex justify-center">
           <img
             className="h-12 w-auto"
-            src="/logo.svg"
+            src=".\frontend\asset\logo.png"
             alt="E-Learning Platform Logo"
           />
         </Link>

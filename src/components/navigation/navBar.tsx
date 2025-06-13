@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
                   <Link to="/" className="flex items-center">
                     <img
                       className="h-8 w-auto"
-                      src="/logo.svg"
+                      src=".\frontend\asset\logo.png"
                       alt="E-Learning Platform"
                     />
                     <span className="ml-2 text-xl font-bold text-primary-600">E-Learning</span>

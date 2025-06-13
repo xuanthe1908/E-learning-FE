@@ -98,7 +98,7 @@ const LoginPage: React.FC = () => {
         <Link to="/" className="flex justify-center">
           <img
             className="h-12 w-auto"
-            src="/logo.svg"
+            src=".\asset\logo.png"
             alt="E-Learning Platform Logo"
           />
         </Link>
